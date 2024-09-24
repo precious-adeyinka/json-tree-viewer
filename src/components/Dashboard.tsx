@@ -11,84 +11,54 @@ export default function Dashboard() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [ingestorData, setInjestorData] = useState<any | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [jsonData, setJsonData] = useState<any>([
-        {
-          "id": 1,
-          "name": "Alice",
-          "details": {
-            "age": 30,
-            "address": {
-              "street": "123 Main St",
-              "city": "Anytown",
-              "coordinates": {
-                "latitude": 40.7128,
-                "longitude": -74.0060
-              }
-            },
-            "data": [
-              42,
-              "text",
-              false,
-              null,
-              {
-                "key": "value",
-                "nestedArray": [
-                  {
-                    "item": "item1",
-                    "attributes": {
-                      "color": "red",
-                      "size": "large"
-                    }
-                  },
-                  {
-                    "item": "item2",
-                    "attributes": {
-                      "color": "blue",
-                      "size": "medium"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
+    const [jsonData, setJsonData] = useState<any>({
+        "name": "John Doe",
+        "age": 30,
+        "isActive": true,
+        "hobbies": ["reading", "gaming", "hiking"],
+        "address": {
+          "street": "123 Main St",
+          "city": "Anytown",
+          "postalCode": "12345"
         },
-        {
-          "id": 2,
-          "name": "Bob",
-          "details": {
-            "age": 25,
-            "address": {
-              "street": "456 Elm St",
-              "city": "Othertown",
-              "coordinates": {
-                "latitude": 34.0522,
-                "longitude": -118.2437
-              }
-            },
-            "data": [
-              "another string",
-              3.14,
-              true
-            ]
+        "projects": [
+          {
+            "title": "Project A",
+            "status": "completed"
+          },
+          {
+            "title": "Project B",
+            "status": "in progress"
           }
-        }
-    ])
+        ]
+      })
 
     const generateJsonTree = () => {
-        setLoading(true)
-
-        if(ingestorData || ingestorData.length > 0) {
-            setTimeout(() => {
-                setJsonData(JSON.parse(ingestorData))
-                setLoading(false)
-                setError(null)
-            }, 1000)
+        setLoading(true);
+    
+        // Check if `ingestorData` is provided and attempt to parse it
+        if (ingestorData) {
+            try {
+                const parsedData = JSON.parse(ingestorData); // Attempt to parse the JSON data
+    
+                // Set the parsed JSON data if valid
+                setTimeout(() => {
+                    setJsonData(parsedData);
+                    setLoading(false);
+                    setError(null);
+                }, 1000);
+            } catch (error) {
+                console.log(error)
+                // Catch any errors that occur during JSON parsing
+                setError("Invalid JSON data. Please provide a valid JSON.");
+                setLoading(false);
+            }
+        } else {
+            setError("Please provide JSON data");
+            setLoading(false);
         }
-        else {
-            setError("Please provide a valid JSON data")
-            setLoading(false)
-        }
-    }
+    };
+    
 
     return (
         <section className="h-full w-full grid grid-cols-1 md:grid-cols-3 gap-5">
